@@ -107,10 +107,13 @@ static int dev_stor_get(int type, int first, int *more, struct device_info *di)
 
 	if (first) {
 		di->cookie = (void *)get_dev(specs[type].name, 0);
-		if (di->cookie == NULL)
+		if (di->cookie == NULL) {
 			return 0;
-		else
+		} else {
 			found = 1;
+			if (specs[type].max_dev > 1)
+				*more = 1;
+		}
 
 	} else {
 		for (i = 0; i < specs[type].max_dev; i++)
