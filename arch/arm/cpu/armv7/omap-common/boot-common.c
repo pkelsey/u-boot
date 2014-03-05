@@ -52,6 +52,8 @@ u32 spl_boot_mode(void)
 
 void spl_board_init(void)
 {
+	boot_params_ptr = (u32 *) &boot_params;
+
 #ifdef CONFIG_SPL_NAND_SUPPORT
 	gpmc_init();
 #endif

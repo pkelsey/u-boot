@@ -101,11 +101,6 @@ void omap_rev_string(void)
 }
 
 #ifdef CONFIG_SPL_BUILD
-static void init_boot_params(void)
-{
-	boot_params_ptr = (u32 *) &boot_params;
-}
-
 void spl_display_print(void)
 {
 	omap_rev_string();
@@ -156,7 +151,6 @@ void s_init(void)
 
 	/* For regular u-boot sdram_init() is called from dram_init() */
 	sdram_init();
-	init_boot_params();
 #endif
 }
 
