@@ -42,6 +42,10 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+#ifndef CONFIG_SPL_BUILD
+extern struct omap_boot_parameters boot_params;
+#endif
+
 static const struct gpio_bank gpio_bank_am33xx[4] = {
 	{ (void *)AM33XX_GPIO0_BASE, METHOD_GPIO_24XX },
 	{ (void *)AM33XX_GPIO1_BASE, METHOD_GPIO_24XX },
@@ -139,6 +143,17 @@ static struct musb_hdrc_platform_data otg1_plat = {
 
 int arch_misc_init(void)
 {
+#ifndef CONFIG_SPL_BUILD
+	unsigned int bootdevice = boot_params.omap_bootdevice;
+	char bdstr[2];
+
+	if ((bootdevice >= MMC_BOOT_DEVICES_START) &&
+	    (bootdevice <= MMC_BOOT_DEVICES_END)) {
+		bdstr[0] = '0' + (bootdevice - MMC_BOOT_DEVICES_START);
+		bdstr[1] = '\0';
+		setenv("mmcdev", bdstr);
+	}
+#endif
 #ifdef CONFIG_AM335X_USB0
 	musb_register(&otg0_plat, &otg0_board_data,
 		(void *)USB0_OTG_BASE);
